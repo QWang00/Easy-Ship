@@ -30,7 +30,6 @@
                             <tr>
 
                                 <th scope="col">Country Name</th>
-                                <th scope="col">Detail</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                             </tr>
@@ -40,8 +39,7 @@
 
                                 <td th:text="${country.name}"></td>
 
-                                <td><a th:href="@{/country/{id}(id=${country.id})}" class="btn btn-primary"><i
-                                        class="fas fa-eye ml-2"></i></a></td>
+
                                 <td><a th:href="@{/update-country/{id}(id=${country.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-country/{id}(id=${country.id})}" class="btn btn-primary"><i

@@ -21,8 +21,8 @@ public abstract class PaymentRecipient {
     private String paymentTerm;
 
 
-    public PaymentRecipient(Long id, String name, String currency, String paymentTerm) {
-        this.id = id;
+    public PaymentRecipient(String name, String currency, String paymentTerm) {
+
         this.name = name;
         this.currency = currency;
         this.paymentTerm = paymentTerm;

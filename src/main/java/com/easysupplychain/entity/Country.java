@@ -22,10 +22,9 @@ public class Country {
     private List<Port> ports = new ArrayList<>();
 
 
-    public Country(Long id, String name, List<Port> ports) {
-        this.id = id;
+    public Country(String name) {
         this.name = name;
-        this.ports = ports;
+
     }
 
     public String toString() {

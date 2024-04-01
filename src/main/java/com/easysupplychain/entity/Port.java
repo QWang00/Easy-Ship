@@ -18,7 +18,7 @@ public class Port {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "country_id")
     private Country country;
 
@@ -26,11 +26,10 @@ public class Port {
     private List<Shipper> shippers = new ArrayList<>();
 
 
-    public Port(Long id, String name, Country country, List<Shipper> shippers) {
-        this.id = id;
+    public Port(String name, Country country) {
         this.name = name;
         this.country = country;
-        this.shippers = shippers;
+
     }
 
     public String toString() {

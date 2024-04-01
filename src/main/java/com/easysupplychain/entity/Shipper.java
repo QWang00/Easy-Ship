@@ -13,11 +13,11 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("SHIPPER")
 public class Shipper extends PaymentRecipient {
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "closest_port_id")
     private Port closestPort;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "container_shippers",
             joinColumns = @JoinColumn(name = "shipper_id"),
@@ -26,9 +26,11 @@ public class Shipper extends PaymentRecipient {
     private Set<Container> containers = new HashSet<>();
 
 
-    public Shipper(Port closestPort, Set<Container> containers) {
+
+    public Shipper(String name, String currency, String paymentTerm, Port closestPort) {
+        super(name, currency, paymentTerm);
         this.closestPort = closestPort;
-        this.containers = containers;
+
     }
 
     public String toString() {

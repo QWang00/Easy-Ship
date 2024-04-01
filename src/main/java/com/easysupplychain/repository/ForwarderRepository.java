@@ -1,7 +1,9 @@
 package com.easysupplychain.repository;
 
 import com.easysupplychain.entity.Forwarder;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ForwarderRepository extends JpaRepository<Forwarder, Long> {
+@Repository
+public interface ForwarderRepository extends PaymentRecipientRepository<Forwarder> {
+    // Forwarder-specific methods, if any
 }

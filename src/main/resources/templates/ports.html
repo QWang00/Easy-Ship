@@ -30,7 +30,7 @@
                             <tr>
 
                                 <th scope="col">Port Name</th>
-                                <th scope="col">Detail</th>
+                                <th scope="col">Country</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                             </tr>
@@ -39,9 +39,7 @@
                             <tr th:each="port : ${ports}">
 
                                 <td th:text="${port.name}"></td>
-
-                                <td><a th:href="@{/port/{id}(id=${port.id})}" class="btn btn-primary"><i
-                                        class="fas fa-eye ml-2"></i></a></td>
+                                <td th:text="${port.country.name}">Country Name</td>
                                 <td><a th:href="@{/update-port/{id}(id=${port.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-port/{id}(id=${port.id})}" class="btn btn-primary"><i

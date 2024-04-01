@@ -2,10 +2,11 @@ package com.easysupplychain.service;
 
 import com.easysupplychain.entity.Shipper;
 import com.easysupplychain.repository.ShipperRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+@Transactional
 @Service
 public class ShipperService {
     @Autowired

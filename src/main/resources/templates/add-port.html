@@ -28,6 +28,16 @@
                         <input type="text" th:field="*{name}" class="form-control" id="name"
                                placeholder="Port Name"/>
                     </div>
+
+                    <div class="form-group col-md-8">
+                        <label for="country">Country</label>
+                        <select class="form-control" th:field="*{country}" id="country" required>
+                            <option value="">-- Select Country --</option>
+                            <option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="alert alert-danger"></div>
+                    </div>
+
                     <div class="col-md-6">
                         <input type="submit" class="btn btn-primary" value=" Submit ">
                     </div>
@@ -37,11 +47,5 @@
         </div>
     </div>
 </div>
-</body>
-</html>
-</title>
-</head>
-<body>
-
 </body>
 </html>

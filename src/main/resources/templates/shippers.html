@@ -30,7 +30,9 @@
                             <tr>
 
                                 <th scope="col">Shipper Name</th>
-                                <th scope="col">Detail</th>
+                                <th scope="col">Currency</th>
+                                <th scope="col">Payment Term</th>
+                                <th scope="col">Closest Port</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                             </tr>
@@ -39,6 +41,9 @@
                             <tr th:each="shipper : ${shippers}">
 
                                 <td th:text="${shipper.name}"></td>
+                                <td th:text="${shipper.currency}"></td>
+                                <td th:text="${shipper.paymentTerm}"></td>
+                                <td th:text="${shipper.closestPort}"></td>
 
                                 <td><a th:href="@{/shipper/{id}(id=${shipper.id})}" class="btn btn-primary"><i
                                         class="fas fa-eye ml-2"></i></a></td>
