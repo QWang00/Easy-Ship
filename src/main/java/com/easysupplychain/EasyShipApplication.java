@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class EasyShipApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EasyShipApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EasyShipApplication.class, args);
+    }
 
 }
