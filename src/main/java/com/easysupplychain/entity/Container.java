@@ -53,4 +53,15 @@ public class Container {
     public String toString() {
         return "Container{id = " + id + ", forwarder = " + forwarder + ", arrivalPort = " + arrivalPort + ", containerNumber = " + containerNumber + ", containerSize = " + containerSize + ", cartonQty = " + cartonQty + ", ETD = " + ETD + ", ETA = " + ETA + ", shippers = " + shippers + "}";
     }
+
+    public void addShipper(Shipper shipper) {
+        shippers.add(shipper);
+        shipper.getContainers().add(this);
+    }
+
+    public void removeShipper(Shipper shipper) {
+        shippers.remove(shipper);
+        shipper.getContainers().remove(this);
+    }
+
 }
