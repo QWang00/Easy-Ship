@@ -43,10 +43,9 @@
                                 <td th:text="${shipper.name}"></td>
                                 <td th:text="${shipper.currency}"></td>
                                 <td th:text="${shipper.paymentTerm}"></td>
-                                <td th:text="${shipper.closestPort}"></td>
+                                <td th:text="${shipper.closestPort.name}"></td>
 
-                                <td><a th:href="@{/shipper/{id}(id=${shipper.id})}" class="btn btn-primary"><i
-                                        class="fas fa-eye ml-2"></i></a></td>
+
                                 <td><a th:href="@{/update-shipper/{id}(id=${shipper.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-shipper/{id}(id=${shipper.id})}" class="btn btn-primary"><i

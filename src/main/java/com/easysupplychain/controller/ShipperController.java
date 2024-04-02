@@ -1,6 +1,4 @@
 package com.easysupplychain.controller;
-
-
 import com.easysupplychain.entity.Shipper;
 import com.easysupplychain.service.PortService;
 import com.easysupplychain.service.ShipperService;
@@ -26,7 +24,7 @@ public class ShipperController {
     private PortService portService;
 
     @GetMapping("/shipper/{id}")
-    public String findPort(@PathVariable Long id, Model model) {
+    public String findShipper(@PathVariable Long id, Model model) {
         Shipper shipper = shipperService.findShipperById(id);
         model.addAttribute("shipper", shipper);
         return "list-shipper";
@@ -45,27 +43,31 @@ public class ShipperController {
         return "shippers";
     }
 
-    @PostMapping("update-shipper/{id}")
-    public String saveUpdateShipper(@PathVariable Long id, Shipper shipper, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors())
+    @GetMapping("/update-shipper/{id}")
+    public String updateShipper(@PathVariable Long id, Model model){
+        Shipper shipper = shipperService.findShipperById(id);
+        if (shipper == null) {
+            return "redirect:/shippers";
+        }
+
+        model.addAttribute("shipper", shipper);
+        model.addAttribute("ports", portService.findAllPorts());
+        return "update-shipper";
+    }
+
+    @PostMapping("/save-Shipperupdate/{id}")
+    public String saveUpdateShipper(@PathVariable Long id, Shipper shipper, BindingResult result, Model model){
+        if (result.hasErrors()) {
             return "update-shipper";
+        }
         shipperService.updateShipper(shipper);
         model.addAttribute("shippers", shipperService.findAllShippers());
         return "redirect:/shippers";
     }
-    @GetMapping("/update-shipper/{id}")
-    public String updateShipper(@PathVariable Long id, Model model) {
-        Shipper shipper = shipperService.findShipperById(id);
-        if (shipper == null) {
-            return "redirect:/shippers"; // Or to an error page
-        }
-        model.addAttribute("shipper", shipper);
-        model.addAttribute("ports", portService.findAllPorts()); // Include ports in the model
-        return "update-shipper";
-    }
 
     @GetMapping("/add-shipper")
-    public String addShipper(Shipper shipper, Model model) {
+    public String showCreateShipper(Model model) {
+        model.addAttribute("shipper", new Shipper());
         model.addAttribute("ports", portService.findAllPorts());
         return "add-shipper";
     }

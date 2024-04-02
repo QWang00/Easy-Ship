@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,21 +18,29 @@ public class Port {
 
     private String name;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
 
-    @OneToMany(mappedBy = "closestPort")
-    private List<Shipper> shippers = new ArrayList<>();
+    @OneToMany(mappedBy = "closestPort", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Shipper> shippers;
 
+    public void addShipper(Shipper shipper) {
+        shippers.add(shipper);
+        shipper.setClosestPort(this);
+    }
 
-    public Port(String name, Country country) {
+    // Utility method to remove a port from the country
+    public void removeShipper(Shipper shipper) {
+        shippers.remove(shipper);
+        shipper.setClosestPort(null);
+    }
+
+    public Port(String name) {
         this.name = name;
-        this.country = country;
-
     }
 
     public String toString() {
-        return "Port{id = " + id + ", name = " + name + ", country = " + country + ", shippers = " + shippers + "}";
+        return "Port{id = " + id + ", name = " + name + "}";
     }
 }

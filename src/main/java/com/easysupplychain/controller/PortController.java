@@ -65,17 +65,13 @@ public class PortController {
         return "update-port";
     }
 
-    @PostMapping("/update-port/{id}")
-    public String saveUpdatePort(@PathVariable Long id, Port port, BindingResult bindingResult, Model model){
-        if (port.getCountry() == null || port.getCountry().getId() == null) {
-            bindingResult.rejectValue("country", "error.port", "Selecting a country is required.");
-        }
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("port", port); // Keep the entered port data
-            model.addAttribute("countries", countryService.findAllCountries()); // Add countries again
+    @PostMapping("/save-update/{id}")
+    public String saveUpdatePort(@PathVariable Long id, Port port, BindingResult result, Model model){
+        if (result.hasErrors()) {
             return "update-port";
         }
-        portService.updatePort(port); // Update the port
+        portService.updatePort(port);
+        model.addAttribute("ports", portService.findAllPorts());
         return "redirect:/ports";
     }
 

@@ -11,6 +11,7 @@ import lombok.Setter;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
+
 public abstract class PaymentRecipient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

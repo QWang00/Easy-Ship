@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("SHIPPER")
 public class Shipper extends PaymentRecipient {
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "closest_port_id")
     private Port closestPort;
 
