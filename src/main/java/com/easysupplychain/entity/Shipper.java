@@ -13,11 +13,11 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("SHIPPER")
 public class Shipper extends PaymentRecipient {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "closest_port_id")
     private Port closestPort;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "container_shippers",
             joinColumns = @JoinColumn(name = "shipper_id"),

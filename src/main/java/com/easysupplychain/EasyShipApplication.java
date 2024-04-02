@@ -20,28 +20,31 @@ public class EasyShipApplication {
         SpringApplication.run(EasyShipApplication.class, args);}
 
     @Bean
-    public CommandLineRunner loadData(CountryRepository countryRepository, PortRepository portRepository, ShipperRepository shipperRepository, ForwarderRepository forwarderRepository) {
+
+    public CommandLineRunner loadData(CountryRepository countryRepository, PortRepository portRepository) {
         return (args) -> {
-            // Check if data already exists to avoid duplicates
-            if (countryRepository.count() == 0) {
-                // Create and save countries
-                Country country1 = new Country("Country A");
-                country1 = countryRepository.save(country1);
+            // Assuming countries are pre-populated or checked here
+            Country country1 = new Country("Country A");
+            countryRepository.save(country1); // Persist country1
 
-                Country country2 = new Country("Country B");
-                country2 = countryRepository.save(country2);
+            Country country2 = new Country("Country B");
+            countryRepository.save(country2); // Persist country2
 
-                // Create and save ports
-                Port port1 = new Port("Port X", country1);
-                portRepository.save(port1);
+            // Now creating ports and associating them with an existing country
+//            Port port1 = new Port("Port X", country1);
+//            portRepository.save(port1); // Persist port1 with country1 associated
+//
+//            Port port2 = new Port("Port Y", country2);
+//            portRepository.save(port2); // Persist port2 with country2 associated
+//
+//            // Assuming you want to create more ports for country1
+//            Port port3 = new Port("Port Z", country1);
+//            portRepository.save(port3); // Persist port3 with country1 associated
+        };}}
 
-                Port port2 = new Port("Port Y", country1);
-                portRepository.save(port2);
 
-                Port port3 = new Port("Port Z", country2);
-                portRepository.save(port3);
 
-                // Create and save Shippers
+//                 Create and save Shippers
 
 //                Shipper shipper1 = new Shipper("Shipper One", "USD","30 days", port1);
 //                shipperRepository.save(shipper1);
@@ -66,12 +69,8 @@ public class EasyShipApplication {
 //                forwarderRepository.save(forwarder2);
 
 
-        }
 
 
-    };
 
-
-    }}
 
 

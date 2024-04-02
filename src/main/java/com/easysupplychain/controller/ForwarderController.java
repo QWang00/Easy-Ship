@@ -1,7 +1,6 @@
 package com.easysupplychain.controller;
 
 import com.easysupplychain.entity.Forwarder;
-import com.easysupplychain.entity.Forwarder;
 import com.easysupplychain.service.ForwarderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +24,12 @@ public class ForwarderController {
         model.addAttribute("forwarders", forwarders);
         return "forwarders";
     }
+    @GetMapping("/forwarder/{id}")
+    public String findForwarder(@PathVariable Long id, Model model) {
+        Forwarder forwarder = forwarderService.findForwarderById(id);
+        model.addAttribute("forwarder", forwarder);
+        return "list-forwarder";
+    }
 
     @GetMapping("remove-forwarder/{id}")
     public String removeForwarder(@PathVariable Long id, Model model){
@@ -33,6 +38,11 @@ public class ForwarderController {
         return "forwarders";
     }
 
+    @GetMapping("update-forwarder/{id}")
+    public String updateForwarder(@PathVariable Long id, Model model){
+        model.addAttribute("forwarder", forwarderService.findForwarderById(id));
+        return "update-forwarder";
+    }
     @PostMapping("update-forwarder/{id}")
     public String saveUpdateForwarder(@PathVariable Long id, Forwarder forwarder, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors())
@@ -41,11 +51,7 @@ public class ForwarderController {
         model.addAttribute("forwarders", forwarderService.findAllForwarders());
         return "redirect:/forwarders";
     }
-    @GetMapping("update-forwarder/{id}")
-    public String updateForwarder(@PathVariable Long id, Model model){
-        model.addAttribute("forwarder", forwarderService.findForwarderById(id));
-        return "update-forwarder";
-    }
+
     @GetMapping("/add-forwarder")
     public String showCreateForwarder(Forwarder forwarder) {
         return "add-forwarder";

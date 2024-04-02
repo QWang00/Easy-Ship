@@ -39,7 +39,7 @@
                             <tr th:each="port : ${ports}">
 
                                 <td th:text="${port.name}"></td>
-                                <td th:text="${port.country.name}">Country Name</td>
+                                <td th:text="${port.country.name}"></td>
                                 <td><a th:href="@{/update-port/{id}(id=${port.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-port/{id}(id=${port.id})}" class="btn btn-primary"><i

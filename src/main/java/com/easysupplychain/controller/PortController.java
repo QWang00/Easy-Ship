@@ -2,8 +2,13 @@ package com.easysupplychain.controller;
 
 import com.easysupplychain.entity.Country;
 import com.easysupplychain.entity.Port;
+import com.easysupplychain.service.ContainerService;
 import com.easysupplychain.service.CountryService;
 import com.easysupplychain.service.PortService;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +27,9 @@ public class PortController {
 
     @Autowired
     private CountryService countryService;
+
+    @Autowired
+    private ContainerService containerService;
 
     @GetMapping("/ports")
     public String findAllPorts(Model model) {
@@ -51,7 +59,7 @@ public class PortController {
             // handle the case where a port with the given ID doesn't exist
             return "redirect:/ports";
         }
-        List<Country> countries = countryService.findAllCountries();
+
         model.addAttribute("port", port);
         model.addAttribute("countries", countryService.findAllCountries());
         return "update-port";

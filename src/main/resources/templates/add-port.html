@@ -23,9 +23,10 @@
         <div class="card-body">
             <form action="#" th:action="@{/save-port}" th:object="${port}" method="post">
                 <div class="row">
+
                     <div class="form-group col-md-8">
                         <label for="name" class="col-form-label">Port Name</label>
-                        <input type="text" th:field="*{name}" class="form-control" id="name"
+                        <input type="text" th:field="*{name}" class="form-control" id="name" required
                                placeholder="Port Name"/>
                     </div>
 

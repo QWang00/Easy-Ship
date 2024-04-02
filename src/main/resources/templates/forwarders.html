@@ -33,8 +33,9 @@
                             <thead>
                             <tr>
 
-                                <th scope="col">Forwarder Name</th>
-                                <th scope="col">Detail</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Currency</th>
+                                <th scope="col">Payment Term</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                             </tr>
@@ -43,9 +44,8 @@
                             <tr th:each="forwarder : ${forwarders}">
 
                                 <td th:text="${forwarder.name}"></td>
-
-                                <td><a th:href="@{/forwarder/{id}(id=${forwarder.id})}" class="btn btn-primary"><i
-                                        class="fas fa-eye ml-2"></i></a></td>
+                                <td th:text="${forwarder.currency}"></td>
+                                <td th:text="${forwarder.paymentTerm}"></td>
                                 <td><a th:href="@{/update-forwarder/{id}(id=${forwarder.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-forwarder/{id}(id=${forwarder.id})}" class="btn btn-primary"><i
@@ -59,11 +59,5 @@
         </div>
     </div>
 </div>
-</body>
-</html>
-</title>
-</head>
-<body>
-
 </body>
 </html>
