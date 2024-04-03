@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -65,15 +66,42 @@ public class PortController {
         return "update-port";
     }
 
+//    @PostMapping("/save-update/{id}")
+//    public String saveUpdatePort(@PathVariable Long id, Port port, BindingResult result, Model model){
+//        if (result.hasErrors()) {
+//            return "update-port";
+//        }
+//        portService.updatePort(port);
+//        model.addAttribute("ports", portService.findAllPorts());
+//        return "redirect:/ports";
+//    }
+
+
     @PostMapping("/save-update/{id}")
-    public String saveUpdatePort(@PathVariable Long id, Port port, BindingResult result, Model model){
+    public String saveUpdatePort(@PathVariable Long id, @ModelAttribute("port") Port updatedPort, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("countries", countryService.findAllCountries()); // Repopulate countries for dropdown
             return "update-port";
         }
-        portService.updatePort(port);
+        Port existingPort = portService.findPortById(id);
+        if (existingPort == null) {
+            // Handle the case where the port doesn't exist in the database
+            return "redirect:/ports";
+        }
+
+        // Update the simple fields
+        existingPort.setName(updatedPort.getName());
+        existingPort.setCountry(updatedPort.getCountry());
+        // ... update other fields as necessary
+
+        // Update collections, if applicable
+        // Example: Iterate through the updatedPort's collection and update the existingPort's collection items
+
+        portService.updatePort(existingPort); // Save the existing (now updated) port
         model.addAttribute("ports", portService.findAllPorts());
         return "redirect:/ports";
     }
+
 
 
 

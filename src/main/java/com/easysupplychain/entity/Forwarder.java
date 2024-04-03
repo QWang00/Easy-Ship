@@ -1,5 +1,6 @@
 package com.easysupplychain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Entity
 @DiscriminatorValue("FORWARDER")
 public class Forwarder extends PaymentRecipient {
-    @OneToMany(mappedBy = "forwarder")
+    @OneToMany(mappedBy = "forwarder", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Container> containers = new HashSet<>();
 
     public Forwarder(Set<Container> containers) {
@@ -24,6 +25,17 @@ public class Forwarder extends PaymentRecipient {
 
     public String toString() {
         return "Forwarder{containers = " + containers + "}";
+    }
+
+    public void addContainer(Container container) {
+        containers.add(container);
+        container.setForwarder(this);
+
+    }
+
+    public void removeContainer(Container container) {
+        containers.remove(container);
+        container.setForwarder(null);
     }
 
 

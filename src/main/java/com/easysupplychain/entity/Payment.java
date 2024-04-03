@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,11 +17,11 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "recipient_id", nullable = false)
-    private PaymentRecipient recipient;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_recipient_id")
+    private PaymentRecipient paymentRecipient;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "container_id", nullable = false)
     private Container container;
 
@@ -30,24 +30,14 @@ public class Payment {
     private Date paymentDate;
     private String remark;
 
-
-    public Payment(Long id, PaymentRecipient recipient, Container container, String invoiceNumber, BigDecimal amount, Date paymentDate, String remark) {
-        this.id = id;
-        this.recipient = recipient;
-        this.container = container;
-        this.invoiceNumber = invoiceNumber;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.remark = remark;
-    }
-
-    public String toString() {
-        return "Payment{id = " + id + ", recipient = " + recipient + ", container = " + container + ", invoiceNumber = " + invoiceNumber + ", amount = " + amount + ", paymentDate = " + paymentDate + ", remark = " + remark + "}";
-    }
-
     public String getRecipientType() {
         // This method assumes the discriminator values are "SHIPPER" and "FORWARDER"
         return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
+
+
+
+
+
 
 }

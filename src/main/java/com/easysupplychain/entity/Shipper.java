@@ -17,7 +17,7 @@ public class Shipper extends PaymentRecipient {
     @JoinColumn(name = "closest_port_id")
     private Port closestPort;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "container_shippers",
             joinColumns = @JoinColumn(name = "shipper_id"),
@@ -35,5 +35,15 @@ public class Shipper extends PaymentRecipient {
 
     public String toString() {
         return "Shipper{closestPort = " + closestPort + ", containers = " + containers + "}";
+    }
+
+    public void addContainer(Container container) {
+        containers.add(container);
+        container.getShippers().add(this);
+    }
+
+    public void removeContainer(Container container) {
+        containers.remove(container);
+        container.getShippers().remove(this);
     }
 }
