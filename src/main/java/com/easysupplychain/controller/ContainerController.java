@@ -2,6 +2,7 @@ package com.easysupplychain.controller;
 
 import com.easysupplychain.entity.Container;
 import com.easysupplychain.entity.Container;
+import com.easysupplychain.entity.Port;
 import com.easysupplychain.service.ContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,13 @@ public class ContainerController {
         List<Container> containers = containerService.findAllContainers();
         model.addAttribute("containers", containers);
         return "containers";
+    }
+
+    @GetMapping("/container/{id}")
+    public String findContainer(@PathVariable Long id, Model model) {
+        Container container = containerService.findContainerById(id);
+        model.addAttribute("container", container);
+        return "list-container";
     }
     @GetMapping("remove-container/{id}")
     public String removeContainer(@PathVariable Long id, Model model){

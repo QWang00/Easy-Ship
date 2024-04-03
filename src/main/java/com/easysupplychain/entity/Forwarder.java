@@ -33,6 +33,10 @@ public class Forwarder extends PaymentRecipient {
 
     }
 
+    public Forwarder(String name, String currency, String paymentTerm) {
+        super(name, currency, paymentTerm);
+    }
+
     public void removeContainer(Container container) {
         containers.remove(container);
         container.setForwarder(null);

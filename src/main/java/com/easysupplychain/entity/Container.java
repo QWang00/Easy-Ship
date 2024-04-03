@@ -31,8 +31,8 @@ public class Container {
     @ManyToMany(mappedBy = "containers")
     private Set<Shipper> shippers = new HashSet<>();
 
-    @OneToMany(mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Payment> payments = new HashSet<>();
+//    @OneToMany(mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Payment> payments = new HashSet<>();
 
 
     private String containerNumber;
@@ -42,16 +42,13 @@ public class Container {
     private Date ETA;
 
 
-    public Container(Long id, Forwarder forwarder, Port arrivalPort, String containerNumber, String containerSize, Integer cartonQty, Date ETD, Date ETA, Set<Shipper> shippers) {
-        this.id = id;
-        this.forwarder = forwarder;
-        this.toPort = arrivalPort;
+    public Container( String containerNumber, String containerSize, Integer cartonQty, Date ETD, Date ETA) {
         this.containerNumber = containerNumber;
         this.containerSize = containerSize;
         this.cartonQty = cartonQty;
         this.ETD = ETD;
         this.ETA = ETA;
-        this.shippers = shippers;
+
     }
 
     public String toString() {
@@ -81,14 +78,14 @@ public class Container {
         shipper.getContainers().remove(this);
     }
 
-    public void addPayment(Payment payment) {
-        payments.add(payment);
-        payment.setContainer(this);
-    }
-
-    public void removePayment(Payment payment) {
-        payments.remove(payment);
-        payment.setContainer(null);
-    }
+//    public void addPayment(Payment payment) {
+//        payments.add(payment);
+//        payment.setContainer(this);
+//    }
+//
+//    public void removePayment(Payment payment) {
+//        payments.remove(payment);
+//        payment.setContainer(null);
+//    }
 
 }

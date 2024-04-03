@@ -26,11 +26,8 @@ public class Shipper extends PaymentRecipient {
     private Set<Container> containers = new HashSet<>();
 
 
-
-    public Shipper(String name, String currency, String paymentTerm, Port closestPort) {
+    public Shipper(String name, String currency, String paymentTerm) {
         super(name, currency, paymentTerm);
-        this.closestPort = closestPort;
-
     }
 
     public String toString() {
@@ -46,4 +43,5 @@ public class Shipper extends PaymentRecipient {
         containers.remove(container);
         container.getShippers().remove(this);
     }
+
 }
