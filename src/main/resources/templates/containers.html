@@ -33,10 +33,9 @@
                             <thead>
                             <tr>
                                 <th scope="col">Container Number</th>
-                                <th scope="col">From Port</th>
-                                <th scope="col">To Port</th>
                                 <th scope="col">Size</th>
-                                <th scope="col">Carton QTY</th>
+                                <th scope="col">Departure Port</th>
+                                <th scope="col">Arrival Port</th>
                                 <th scope="col">ETD</th>
                                 <th scope="col">ETA</th>
                                 <th scope="col">Detail</th>
@@ -48,10 +47,9 @@
                             <tr th:each="container : ${containers}">
 
                                 <td th:text="${container.containerNumber}"></td>
-                                <td th: text="${container.fromPort.name}"></td>
-                                <td th: text="${container.toPort.name}"></td>
-                                <td th: text="${container.containerSize}"></td>
-                                <td th: text="${container.cartonQTY}"></td>
+                                <td th:text="${container.containerSize}"></td>
+                                <td th:text="${container.fromPort.name}"></td>
+                                <td th:text="${container.toPort.name}"></td>
                                 <td th:text="${#dates.format(container.ETD, 'yyyy-MM-dd')}"></td>
                                 <td th:text="${#dates.format(container.ETA, 'yyyy-MM-dd')}"></td>
 
@@ -70,11 +68,5 @@
         </div>
     </div>
 </div>
-</body>
-</html>
-</title>
-</head>
-<body>
-
 </body>
 </html>

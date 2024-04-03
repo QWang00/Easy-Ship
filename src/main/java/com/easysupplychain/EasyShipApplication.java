@@ -63,7 +63,6 @@ public class EasyShipApplication {
 
             Forwarder forwarder1 = new Forwarder("Schenker", "GBP", "End of Following Month");
             Forwarder forwarder2 = new Forwarder("Robema", "EUR", "7 Days Before ETA");
-            //forwarder1.addPayment(payment2);
             payment2.setPaymentRecipient(forwarder1);
 
             Shipper shipper1 = new Shipper("Shuree", "USD", "7 Days Before ETA");
@@ -72,14 +71,11 @@ public class EasyShipApplication {
             shipper2.setClosestPort(port3);
             shipper1.addPayment(payment1);
 
-
-
             Container container1 = new Container("HQWE1230123", "40HQ", 1000, new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-21"), new SimpleDateFormat("yyyy-MM-dd").parse("2021-03-29"));
             container1.setForwarder(forwarder1);
             container1.addShipperToContainer(container1, shipper1);
             container1.setToPort(port1);
             container1.setFromPort(shipper1.getClosestPort());
-
 
             countryService.createCountry(country1);
             countryService.createCountry(country2);
@@ -99,7 +95,6 @@ public class EasyShipApplication {
             shipperService.createShipper(shipper2);
             paymentService.createPayment(payment1);
             paymentService.createPayment(payment2);
-
 
             containerService.createContainer(container1);
 
