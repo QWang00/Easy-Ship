@@ -36,13 +36,31 @@ public class Shipper extends PaymentRecipient {
     }
 
     public void addContainer(Container container) {
-        containers.add(container);
-        container.getShippers().add(this);
+        // Check if the container is already associated to prevent duplicate additions
+        if (!this.containers.contains(container)) {
+            containers.add(container);
+            // Also make sure to update the other side of the relationship if it's not already done
+            if (!container.getShippers().contains(this)) {
+                container.getShippers().add(this);
+                // Optionally set the container's fromPort if it's null and the shipper has a closestPort
+                if (container.getFromPort() == null && this.getClosestPort() != null) {
+                    container.setFromPort(this.getClosestPort());
+                }
+            }
+        }
     }
 
+
     public void removeContainer(Container container) {
-        containers.remove(container);
-        container.getShippers().remove(this);
+        // Check if the container is actually associated before attempting to remove
+        if (this.containers.contains(container)) {
+            containers.remove(container);
+            // Ensure the other side of the relationship is also updated accordingly
+            if (container.getShippers().contains(this)) {
+                container.getShippers().remove(this);
+            }
+        }
     }
+
 
 }

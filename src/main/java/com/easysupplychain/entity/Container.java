@@ -30,7 +30,7 @@ public class Container {
     @JoinColumn(name = "from_port_id")
     private Port fromPort; // Departure port, shared by all shippers in this container.
 
-    @ManyToMany(mappedBy = "containers")
+    @ManyToMany(mappedBy = "containers",cascade = {CascadeType.PERSIST})
     private Set<Shipper> shippers = new HashSet<>();
 
 //    @OneToMany(mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,24 +65,30 @@ public class Container {
 
     public void addShipper(Shipper shipper) {
         if (this.getShippers().isEmpty()) {
-            // If the container is new and has no shippers yet, set the fromPort based on the first shipper's closestPort
             this.setFromPort(shipper.getClosestPort());
         } else if (!shipper.getClosestPort().equals(this.getFromPort())) {
-            // If the shipper's closestPort does not match the container's fromPort, throw an exception
             throw new IllegalArgumentException("Shipper's closest port does not match the container's departure port."
                     + " Shipper's closest port: " + shipper.getClosestPort()
                     + ", Container's departure port: " + this.getFromPort());
         }
-        // If the shipper's closestPort matches the container's fromPort, add the shipper to the container
-        this.getShippers().add(shipper);
+        // Ensure the relationship is maintained from both sides
+        if (!this.getShippers().contains(shipper)) {
+            this.getShippers().add(shipper);
+            if (!shipper.getContainers().contains(this)) {
+                shipper.getContainers().add(this);
+            }
+        }
     }
-
-
 
     public void removeShipper(Shipper shipper) {
-        shippers.remove(shipper);
-        shipper.getContainers().remove(this);
+        if (this.getShippers().contains(shipper)) {
+            shippers.remove(shipper);
+            if (shipper.getContainers().contains(this)) {
+                shipper.getContainers().remove(this);
+            }
+        }
     }
+
 
 //    public void addPayment(Payment payment) {
 //        payments.add(payment);
