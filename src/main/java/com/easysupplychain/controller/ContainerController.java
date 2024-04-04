@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ContainerController {
@@ -26,6 +27,9 @@ public class ContainerController {
         model.addAttribute("containers", containers);
         return "containers";
     }
+
+
+
 
     @GetMapping("/container/{id}")
     public String findContainer(@PathVariable Long id, Model model) {

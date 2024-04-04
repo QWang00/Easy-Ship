@@ -7,6 +7,8 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,40 +39,53 @@ public class Container {
 
     private String containerNumber;
     private String containerSize;
-    private Integer cartonQty;
+    //private Integer cartonQty;
     private Date ETD;
     private Date ETA;
 
 
-    public Container( String containerNumber, String containerSize, Integer cartonQty, Date ETD, Date ETA) {
+    public Container( String containerNumber, String containerSize, Date ETD, Date ETA) {
         this.containerNumber = containerNumber;
         this.containerSize = containerSize;
-        this.cartonQty = cartonQty;
+        //this.cartonQty = cartonQty;
         this.ETD = ETD;
         this.ETA = ETA;
-
     }
 
-    public String toString() {
-        return "Container{id = " + id + ", forwarder = " + forwarder + ", toPort = " + toPort + ", containerNumber = " + containerNumber + ", containerSize = " + containerSize + ", cartonQty = " + cartonQty + ", ETD = " + ETD + ", ETA = " + ETA + ", shippers = " + shippers + "}";
+    //Method to set fromPort automatically from container.shipper when one shipper is added
+    @PostLoad
+    public void setFromPortFromShipper() {
+        if (shippers != null && !shippers.isEmpty() && shippers.iterator().next().getClosestPort() != null) {
+            this.fromPort = shippers.iterator().next().getClosestPort();
+        } else {
+            System.out.println("Error: Closest port not available for shipper.");
+        }
     }
 
-//    public void addShipper(Shipper shipper) {
-//        shippers.add(shipper);
-//        shipper.getContainers().add(this);
-//    }
 
-    public void addShipperToContainer(Container container, Shipper shipper) {
-        if (container.getShippers().isEmpty()) {
+    // Method to get names of the first three shippers
+    public String getFirstThreeShippers() {
+        return shippers.stream()
+                .map(Shipper::getName)
+                .limit(3) // Limit to first three
+                .collect(Collectors.joining(", ", "", shippers.size() > 3 ? "..." : ""));
+        // Joins names with commas, appends "..." if more than three shippers
+    }
+
+    public void addShipper(Shipper shipper) {
+        if (this.getShippers().isEmpty()) {
             // If the container is new and has no shippers yet, set the fromPort based on the first shipper's closestPort
-            container.setFromPort(shipper.getClosestPort());
-        } else if (!shipper.getClosestPort().equals(container.getFromPort())) {
+            this.setFromPort(shipper.getClosestPort());
+        } else if (!shipper.getClosestPort().equals(this.getFromPort())) {
             // If the shipper's closestPort does not match the container's fromPort, throw an exception
-            throw new IllegalArgumentException("Shipper's closest port does not match the container's departure port.");
+            throw new IllegalArgumentException("Shipper's closest port does not match the container's departure port."
+                    + " Shipper's closest port: " + shipper.getClosestPort()
+                    + ", Container's departure port: " + this.getFromPort());
         }
         // If the shipper's closestPort matches the container's fromPort, add the shipper to the container
-        container.getShippers().add(shipper);
+        this.getShippers().add(shipper);
     }
+
 
 
     public void removeShipper(Shipper shipper) {

@@ -1,6 +1,7 @@
 package com.easysupplychain.entity;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class Shipper extends PaymentRecipient {
     @JoinColumn(name = "closest_port_id")
     private Port closestPort;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "container_shippers",
             joinColumns = @JoinColumn(name = "shipper_id"),

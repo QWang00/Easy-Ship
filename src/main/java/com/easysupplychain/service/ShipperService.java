@@ -20,15 +20,15 @@ public class ShipperService {
         Shipper shipper = shipperRepository.findById(id).orElseThrow(() ->new RuntimeException("Shipper Not found"));
         return shipper;
     }
-
+    @Transactional
     public void createShipper(Shipper shipper){
         shipperRepository.save(shipper);
     }
-
+    @Transactional
     public void updateShipper(Shipper shipper){
         shipperRepository.save(shipper);
     }
-
+    @Transactional
     public void deleteShipper(Long id){
         Shipper shipper = shipperRepository.findById(id).orElseThrow(()-> new RuntimeException("Shipper Not Found"));
         shipperRepository.deleteById(shipper.getId());

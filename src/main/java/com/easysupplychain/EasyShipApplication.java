@@ -1,36 +1,39 @@
 package com.easysupplychain;
 
 import com.easysupplychain.entity.*;
-import com.easysupplychain.repository.CountryRepository;
-import com.easysupplychain.repository.ForwarderRepository;
-import com.easysupplychain.repository.PortRepository;
-import com.easysupplychain.repository.ShipperRepository;
 import com.easysupplychain.service.*;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.Id;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
+
 
 @SpringBootApplication
+@EnableTransactionManagement
 public class EasyShipApplication {
+    public static boolean hasIdField(Class<?> entityClass) {
+        Field[] fields = entityClass.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Id.class)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(EasyShipApplication.class, args);}
 
     @Bean
-
     public CommandLineRunner loadData(CountryService countryService, PortService portService, ShipperService shipperService,
                                       ForwarderService forwarderService, PaymentService paymentService, ContainerService containerService
                                       ) {
@@ -67,15 +70,23 @@ public class EasyShipApplication {
 
             Shipper shipper1 = new Shipper("Shuree", "USD", "7 Days Before ETA");
             Shipper shipper2 = new Shipper("Wentee", "USD", "7 Days Before ETA");
+            Shipper shipper3 = new Shipper("Fuqee", "USD", "7 Days Before ETD");
             shipper1.setClosestPort(port4);
             shipper2.setClosestPort(port3);
+            shipper3.setClosestPort(port4);
             shipper1.addPayment(payment1);
 
-            Container container1 = new Container("HQWE1230123", "40HQ", 1000, new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-21"), new SimpleDateFormat("yyyy-MM-dd").parse("2021-03-29"));
+            Container container1 = new Container("HQWE1230123", "40HQ", new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-21"), new SimpleDateFormat("yyyy-MM-dd").parse("2021-03-29"));
             container1.setForwarder(forwarder1);
-            container1.addShipperToContainer(container1, shipper1);
             container1.setToPort(port1);
-            container1.setFromPort(shipper1.getClosestPort());
+            shipper1.addContainer(container1);
+            //container1.addShipper(shipper1);
+//            shipper3.addContainer(container1);
+//            container1.addShipper(shipper3);
+
+
+
+
 
             countryService.createCountry(country1);
             countryService.createCountry(country2);
@@ -90,13 +101,30 @@ public class EasyShipApplication {
             portService.createPort(port7);
             forwarderService.createForwarder(forwarder1);
             forwarderService.createForwarder(forwarder2);
-
             shipperService.createShipper(shipper1);
             shipperService.createShipper(shipper2);
+            shipperService.createShipper(shipper3);
             paymentService.createPayment(payment1);
             paymentService.createPayment(payment2);
-
             containerService.createContainer(container1);
+
+            //test
+            List<Class<?>> entityClasses = Arrays.asList(
+                    Container.class,
+                    Country.class,
+                    Forwarder.class,
+                    Payment.class,
+                    PaymentRecipient.class,
+                    Port.class,
+                    Shipper.class
+            );
+
+            for (Class<?> entityClass : entityClasses) {
+                boolean hasId = hasIdField(entityClass);
+                System.out.println(entityClass.getSimpleName() + " has ID field: " + hasId);
+            }
+            String firstThreeShippers = container1.getFirstThreeShippers();
+            System.out.println("First three shippers for container1: " + firstThreeShippers);
 
         };}}
 
