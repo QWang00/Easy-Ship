@@ -80,7 +80,7 @@ public class EasyShipApplication {
             container1.setForwarder(forwarder1);
             container1.setToPort(port1);
             shipper1.addContainer(container1);
-            //container1.addShipper(shipper1);
+            container1.addShipper(shipper1);
 //            shipper3.addContainer(container1);
 //            container1.addShipper(shipper3);
 
