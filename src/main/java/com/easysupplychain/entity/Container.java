@@ -52,15 +52,6 @@ public class Container {
         this.ETA = ETA;
     }
 
-    //Method to set fromPort automatically from container.shipper when one shipper is added
-    @PostLoad
-    public void setFromPortFromShipper() {
-        if (shippers != null && !shippers.isEmpty() && shippers.iterator().next().getClosestPort() != null) {
-            this.fromPort = shippers.iterator().next().getClosestPort();
-        } else {
-            System.out.println("Error: Closest port not available for shipper.");
-        }
-    }
 
 
     // Method to get names of the first three shippers

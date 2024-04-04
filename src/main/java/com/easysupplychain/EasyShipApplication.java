@@ -80,13 +80,8 @@ public class EasyShipApplication {
             container1.setForwarder(forwarder1);
             container1.setToPort(port1);
             shipper1.addContainer(container1);
-            container1.addShipper(shipper1);
-//            shipper3.addContainer(container1);
-//            container1.addShipper(shipper3);
-
-
-
-
+            container1.setFromPort(shipper1.getClosestPort());
+            container1.addShipper(shipper3);
 
             countryService.createCountry(country1);
             countryService.createCountry(country2);
@@ -125,6 +120,7 @@ public class EasyShipApplication {
             }
             String firstThreeShippers = container1.getFirstThreeShippers();
             System.out.println("First three shippers for container1: " + firstThreeShippers);
+            System.out.println(container1.getFromPort());
 
         };}}
 
