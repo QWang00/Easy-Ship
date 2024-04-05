@@ -76,9 +76,11 @@ public class EasyShipApplication {
             shipper3.setClosestPort(port4);
             shipper1.addPayment(payment1);
 
+
             Container container1 = new Container("HQWE1230123", "40HQ", new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-21"), new SimpleDateFormat("yyyy-MM-dd").parse("2021-03-29"));
             container1.setForwarder(forwarder1);
             container1.setToPort(port1);
+            container1.setFromPort(port4);
             shipper1.addContainer(container1);
             shipper3.addContainer(container1);
 
@@ -102,21 +104,7 @@ public class EasyShipApplication {
             paymentService.createPayment(payment2);
             containerService.createContainer(container1);
 
-            //test
-            List<Class<?>> entityClasses = Arrays.asList(
-                    Container.class,
-                    Country.class,
-                    Forwarder.class,
-                    Payment.class,
-                    PaymentRecipient.class,
-                    Port.class,
-                    Shipper.class
-            );
-
-            for (Class<?> entityClass : entityClasses) {
-                boolean hasId = hasIdField(entityClass);
-                System.out.println(entityClass.getSimpleName() + " has ID field: " + hasId);
-            }
+            //test logic
             String firstThreeShippers = container1.getFirstThreeShippers();
             System.out.println("First three shippers for container1: " + firstThreeShippers);
             System.out.println(container1.getShippers());

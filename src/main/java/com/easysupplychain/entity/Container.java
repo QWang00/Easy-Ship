@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,15 +41,15 @@ public class Container {
 
     private String containerNumber;
     private String containerSize;
-    //private Integer cartonQty;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date ETD;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date ETA;
 
 
     public Container( String containerNumber, String containerSize, Date ETD, Date ETA) {
         this.containerNumber = containerNumber;
         this.containerSize = containerSize;
-        //this.cartonQty = cartonQty;
         this.ETD = ETD;
         this.ETA = ETA;
     }
@@ -64,19 +66,17 @@ public class Container {
     }
 
     public void addShipper(Shipper shipper) {
-        if (this.getShippers().isEmpty()) {
-            this.setFromPort(shipper.getClosestPort());
-        } else if (!shipper.getClosestPort().equals(this.getFromPort())) {
+        // Validate that the shipper's closest port matches the container's fromPort
+        if (!shipper.getClosestPort().equals(this.getFromPort())) {
             throw new IllegalArgumentException("Shipper's closest port does not match the container's departure port."
                     + " Shipper's closest port: " + shipper.getClosestPort()
                     + ", Container's departure port: " + this.getFromPort());
         }
+
         // Ensure the relationship is maintained from both sides
         if (!this.getShippers().contains(shipper)) {
             this.getShippers().add(shipper);
-            if (!shipper.getContainers().contains(this)) {
-                shipper.getContainers().add(this);
-            }
+            shipper.getContainers().add(this);
         }
     }
 

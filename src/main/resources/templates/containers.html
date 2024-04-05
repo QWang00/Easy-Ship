@@ -53,12 +53,8 @@
                                 <td th:text="${container.toPort.name}"></td>
                                 <td th:text="${container.forwarder.name}"></td>
                                 <td th:text="${container.getFirstThreeShippers()}"></td>
-
-
-
-
-                                <td th:text="${#dates.format(container.ETD, 'yyyy-MM-dd')}"></td>
-                                <td th:text="${#dates.format(container.ETA, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${#dates.format(container.ETD, 'dd-MM-yyyy')}"></td>
+                                <td th:text="${#dates.format(container.ETA, 'dd-MM-yyyy')}"></td>
                                 <td><a th:href="@{/update-container/{id}(id=${container.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-container/{id}(id=${container.id})}" class="btn btn-primary"><i
