@@ -13,7 +13,9 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -58,11 +60,14 @@ public class EasyShipApplication {
             port6.setCountry(country3);
             port7.setCountry(country4);
 
-            LocalDate date1 = LocalDate.of(2023, 4, 26);
-            LocalDate date2 = LocalDate.of(2023, 7, 20);
-
-            Payment payment1 = new Payment("Shu123", new BigDecimal("45000.00"), date1, "PO0032123");
-            Payment payment2 = new Payment("Sch123", new BigDecimal("1600.00"), date2, "Local Charge");
+            LocalDate date1 = LocalDate.of(2021, 3, 29);
+            Date paymentDate1 = Date.from(date1.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            LocalDate date2 = LocalDate.of(2025, 7, 20);
+            Date paymentDate2 = Date.from(date2.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Payment payment1 = new Payment("Shu123", new BigDecimal("45000.00"),  "PO0032123");
+            Payment payment2 = new Payment("Sch123", new BigDecimal("1600.00"),  "Local Charge");
+            //payment2.setPaymentDate(paymentDate2);
+            payment1.setPaymentDate(paymentDate1);
 
             Forwarder forwarder1 = new Forwarder("Schenker", "GBP", "End of Following Month");
             Forwarder forwarder2 = new Forwarder("Robema", "EUR", "7 Days Before ETA");
@@ -77,12 +82,14 @@ public class EasyShipApplication {
             shipper1.addPayment(payment1);
 
 
-            Container container1 = new Container("HQWE1230123", "40HQ", new SimpleDateFormat("yyyy-MM-dd").parse("2021-01-21"), new SimpleDateFormat("yyyy-MM-dd").parse("2021-03-29"));
+            Container container1 = new Container("HQWE1230123", "40HQ", new SimpleDateFormat("yyyy-MM-dd").parse("2024-01-21"), new SimpleDateFormat("yyyy-MM-dd").parse("2024-03-29"));
             container1.setForwarder(forwarder1);
             container1.setToPort(port1);
             container1.setFromPort(port4);
             shipper1.addContainer(container1);
             shipper3.addContainer(container1);
+            payment1.setContainer(container1);
+            container1.addPayment(payment2);
 
             countryService.createCountry(country1);
             countryService.createCountry(country2);
@@ -105,10 +112,7 @@ public class EasyShipApplication {
             containerService.createContainer(container1);
 
             //test logic
-            String firstThreeShippers = container1.getFirstThreeShippers();
-            System.out.println("First three shippers for container1: " + firstThreeShippers);
-            System.out.println(container1.getShippers());
-            System.out.println(container1.getFromPort());
+            System.out.println(payment1.getRecipientType());
 
         };}}
 

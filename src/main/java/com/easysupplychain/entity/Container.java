@@ -34,8 +34,8 @@ public class Container {
     @ManyToMany(mappedBy = "containers",cascade = {CascadeType.PERSIST})
     private Set<Shipper> shippers = new HashSet<>();
 
-//    @OneToMany(mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Payment> payments = new HashSet<>();
+    @OneToMany(mappedBy = "container", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Payment> payments = new HashSet<>();
 
 
     private String containerNumber;
@@ -89,14 +89,14 @@ public class Container {
     }
 
 
-//    public void addPayment(Payment payment) {
-//        payments.add(payment);
-//        payment.setContainer(this);
-//    }
-//
-//    public void removePayment(Payment payment) {
-//        payments.remove(payment);
-//        payment.setContainer(null);
-//    }
+    public void addPayment(Payment payment) {
+        payments.add(payment);
+        payment.setContainer(this);
+    }
+
+    public void removePayment(Payment payment) {
+        payments.remove(payment);
+        payment.setContainer(null);
+    }
 
 }

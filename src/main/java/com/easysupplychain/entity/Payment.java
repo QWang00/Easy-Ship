@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 @Getter
@@ -19,28 +19,73 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_recipient_id")
     private PaymentRecipient paymentRecipient;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "container_id", nullable = false)
-//    private Container container;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "container_id", nullable = false)
+    private Container container;
 
     private String invoiceNumber;
     private BigDecimal amount;
     private Date paymentDate;
     private String remark;
 
-    public String getRecipientType() {
-        // This method assumes the discriminator values are "SHIPPER" and "FORWARDER"
-        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
-    }
-
-    public Payment(String invoiceNumber, BigDecimal amount, LocalDate paymentDate, String remark) throws ParseException {
+    public Payment(String invoiceNumber, BigDecimal amount, String remark) throws ParseException {
         this.invoiceNumber = invoiceNumber;
         this.amount = new BigDecimal(String.valueOf(amount));
-        this.paymentDate = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(paymentDate));
         this.remark = remark;
     }
+
+    public String getRecipientType() {
+        return this.getPaymentRecipient().getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
+
+    public Date calculateDueDate() {
+        Calendar cal = Calendar.getInstance();
+        if ("7 Days Before ETD".equals(paymentRecipient.getPaymentTerm())) {
+            cal.setTime(container.getETD());
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+        } else if ("Against Original B/L".equals(paymentRecipient.getPaymentTerm())) {
+            cal.setTime(container.getETD());
+            cal.add(Calendar.DAY_OF_MONTH, 7);
+        } else if ("7 Days Before ETA".equals(paymentRecipient.getPaymentTerm())) {
+            cal.setTime(container.getETA());
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+        } else if ("End of Following Month".equals(paymentRecipient.getPaymentTerm())) {
+            cal.setTime(container.getETA());
+            cal.add(Calendar.MONTH, 1); // Move to the following month
+            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH)); // Set to the last day of the month
+        } else {
+            // Default case or unknown payment terms
+            // You might want to handle this differently
+            return null;
+        }
+        return cal.getTime();
+    }
+
+    public String calculatePaymentStatus() {
+        Date now = new Date(); // Current date
+        Date dueDate = calculateDueDate(); // Dynamically calculate due date
+
+        if (paymentDate == null) {
+            if (now.before(dueDate)) {
+                return "Pending";
+            } else {
+                return "Overdue";
+            }
+        } else {
+            if (paymentDate.before(dueDate) || paymentDate.equals(dueDate)) {
+                return "Completed";
+            } else {
+                return "Paid Late";
+            }
+        }
+
+    }
+
+
+
+
 }

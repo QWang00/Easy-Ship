@@ -30,10 +30,15 @@
                             <tr>
 
                                 <th scope="col">Invoice Number</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Recipient</th>
+                                <th scope="col">Currency</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col">Payment Date</th>
+                                <th scope="col">Container Number</th>
                                 <th scope="col">Remark</th>
-                                <th scope="col">Detail</th>
+                                <th scope="col">Due Date</th>
+                                <th scope="col">Payment Date</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                             </tr>
@@ -41,11 +46,17 @@
                             <tbody>
                             <tr th:each="payment : ${payments}">
                                 <td th:text="${payment.invoiceNumber}"></td>
+                                <td th:text="${payment.getRecipientType()}"></td>
+                                <td th:text="${payment.paymentRecipient.name}"></td>
+                                <td th:text="${payment.paymentRecipient.currency}"></td>
                                 <td th:text="${payment.amount}"></td>
-                                <td th:text="${#dates.format(payment.paymentDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${payment.container.containerNumber}"></td>
                                 <td th:text="${payment.remark}"></td>
-                                <td><a th:href="@{/payment/{id}(id=${payment.id})}" class="btn btn-primary"><i
-                                        class="fas fa-eye ml-2"></i></a></td>
+                                <td th:text="${#dates.format(payment.calculateDueDate(), 'dd-MM-yyyy')}"></td>
+                                <td th:text="${payment.paymentDate != null ? #dates.format(payment.paymentDate, 'dd-MM-yyyy') : ''}"></td>
+                                <td th:text="${payment.calculatePaymentStatus()}" class="text-danger"></td>
+
+
                                 <td><a th:href="@{/update-payment/{id}(id=${payment.id})}" class="btn btn-primary"><i
                                         class="fas fa-edit ml-2"></i></a></td>
                                 <td><a th:href="@{/remove-payment/{id}(id=${payment.id})}" class="btn btn-primary"><i
