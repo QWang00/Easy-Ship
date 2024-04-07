@@ -91,6 +91,7 @@ public class EasyShipApplication {
             payment1.setContainer(container1);
             container1.addPayment(payment2);
 
+
             countryService.createCountry(country1);
             countryService.createCountry(country2);
             countryService.createCountry(country3);

@@ -1,10 +1,12 @@
 package com.easysupplychain.service;
 
 import com.easysupplychain.entity.Forwarder;
+import com.easysupplychain.entity.Shipper;
 import com.easysupplychain.repository.ForwarderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ForwarderService {
@@ -13,6 +15,10 @@ public class ForwarderService {
 
     public List<Forwarder> findAllForwarders() {
         return forwarderRepository.findAll();
+    }
+
+    public Optional<Forwarder> findForwarderByIdOptional(Long id) {
+        return forwarderRepository.findById(id);
     }
 
     public Forwarder findForwarderById(Long id) {

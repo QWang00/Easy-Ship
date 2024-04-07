@@ -43,9 +43,14 @@ public abstract class PaymentRecipient {
         payment.setPaymentRecipient(this);
 
     }
+
     public void removePayment(Payment payment) {
         payments.remove(payment);
         payment.setPaymentRecipient(null);
+    }
+
+    public String getType() {
+        return "Unknown";
     }
 }
 

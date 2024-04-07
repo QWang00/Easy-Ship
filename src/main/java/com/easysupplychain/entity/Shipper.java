@@ -49,7 +49,6 @@ public class Shipper extends PaymentRecipient {
         }
     }
 
-
     public void removeContainer(Container container) {
         // Check if the container is actually associated before attempting to remove
         if (this.containers.contains(container)) {
@@ -60,6 +59,12 @@ public class Shipper extends PaymentRecipient {
             }
         }
     }
+
+    @Override
+    public String getType() {
+        return "SHIPPER";
+    }
+
 
 
 }

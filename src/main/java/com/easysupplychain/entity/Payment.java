@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -29,6 +31,7 @@ public class Payment {
 
     private String invoiceNumber;
     private BigDecimal amount;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date paymentDate;
     private String remark;
 
