@@ -24,6 +24,11 @@
                     <p th:text="${dateTimeError}"></p>
                 </div>
 
+                <!-- Shipper Selection Error Message -->
+                <div th:if="${shipperSelectionError}" class="alert alert-danger" role="alert">
+                    <p th:text="${shipperSelectionError}"></p>
+                </div>
+
                 <div class="row">
                     <div class="form-group col-md-8">
                         <label for="number" class="col-form-label">Container Number</label>

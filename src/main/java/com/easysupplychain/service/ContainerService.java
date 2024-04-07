@@ -42,13 +42,7 @@ public class ContainerService {
         containerRepository.deleteById(container.getId());
     }
     @Transactional
-    public void createOrUpdateContainer(Container container, List<Long> shipperIds) {
-        // If it's an update, load the existing container to manage relationships correctly
-        if (container.getId() != null) {
-            Container existingContainer = containerRepository.findById(container.getId())
-                    .orElseThrow(() -> new RuntimeException("Container Not found"));
-            existingContainer.getShippers().clear(); // Clear current shippers if you're replacing them
-        }
+    public void createContainer(Container container, List<Long> shipperIds) {
 
         // Find shippers from the database
         List<Shipper> shippers = shipperRepository.findAllById(shipperIds);
@@ -58,6 +52,43 @@ public class ContainerService {
 
         // Save the container, which will also persist the associations due to cascading
         containerRepository.save(container);
+    }
+
+    @Transactional
+    public Container updateContainer(Container container, List<Long> shipperIds) {
+        Container existingContainer = containerRepository.findById(container.getId())
+                .orElseThrow(() -> new RuntimeException("Container not found"));
+
+        // Update container properties, including departure and arrival ports
+        existingContainer.setContainerNumber(container.getContainerNumber());
+        existingContainer.setContainerSize(container.getContainerSize());
+        existingContainer.setETD(container.getETD());
+        existingContainer.setETA(container.getETA());
+        existingContainer.setFromPort(container.getFromPort());
+        existingContainer.setToPort(container.getToPort());
+        existingContainer.setForwarder(container.getForwarder());
+
+        // First, remove the container from each shipper's set of containers
+        if (existingContainer.getShippers() != null) {
+            existingContainer.getShippers().forEach(shipper -> shipper.getContainers().remove(existingContainer));
+        }
+
+
+        // Clear current shippers if you're replacing them
+        existingContainer.getShippers().clear();
+
+        // If shipperIds is not null or empty, find new shippers from the database and re-establish the relationship
+        if (shipperIds != null && !shipperIds.isEmpty()) {
+            List<Shipper> shippers = shipperRepository.findAllById(shipperIds);
+            shippers.forEach(existingContainer::addShipper); // This validates and adds shippers
+        } else {
+            // Here you can handle the case where no shipper IDs were provided
+            // For example, you could throw an exception or handle it in another way
+            throw new IllegalArgumentException("At least one shipper must be selected.");
+        }
+
+        // Save the updated container
+        return containerRepository.save(existingContainer);
     }
 
     @Transactional

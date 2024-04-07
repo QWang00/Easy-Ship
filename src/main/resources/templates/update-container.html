@@ -13,7 +13,7 @@
 <div class="container my-2">
     <div class="card">
         <div class="card-body">
-            <form th:action="@{/save-update/{id}(id=${container.id})}" th:object="${container}" method="post">
+            <form th:action="@{/save-updateContainer/{id}(id=${container.id})}" th:object="${container}" method="post">
                 <!-- Shipper Port Error Message -->
                 <div th:if="${shipperPortError}" class="alert alert-danger" role="alert">
                     <p th:text="${shipperPortError}"></p>
@@ -23,6 +23,12 @@
                 <div th:if="${dateTimeError}" class="alert alert-danger" role="alert">
                     <p th:text="${dateTimeError}"></p>
                 </div>
+
+                <!-- Shipper Selection Error Message -->
+                <div th:if="${shipperSelectionError}" class="alert alert-danger" role="alert">
+                    <p th:text="${shipperSelectionError}"></p>
+                </div>
+
                 <div class="row">
                     <div class="form-group col-md-8">
                         <label for="number" class="col-form-label">Container Number</label>
