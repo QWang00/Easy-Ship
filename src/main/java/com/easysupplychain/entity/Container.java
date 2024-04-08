@@ -53,9 +53,7 @@ public class Container {
         this.ETA = ETA;
     }
 
-
-
-    // Method to get names of the first three shippers
+    // Method to get names of the first three shippers to present in the shippers.html
     public String getFirstThreeShippers() {
         return shippers.stream()
                 .map(Shipper::getName)
@@ -87,7 +85,6 @@ public class Container {
             }
         }
     }
-
 
     public void addPayment(Payment payment) {
         payments.add(payment);

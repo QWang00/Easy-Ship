@@ -99,7 +99,7 @@ public class ContainerController {
             return "add-container";
         }
 
-        // Validation for ETD and ETA
+        // Validation for ETD & ETA if ETD is earlier than ETA
         if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
             model.addAttribute("dateTimeError", "ETD must be earlier than ETA.");
             addAttributesToModel(model, container);
@@ -108,7 +108,6 @@ public class ContainerController {
 
         // Validate shipper selection and departure port
         if (!validateShippers(shipperIds, container, model)) {
-            // `validateShippers` will add necessary attributes to the model if there's an error
             return "add-container";
         }
 
@@ -125,7 +124,7 @@ public class ContainerController {
         model.addAttribute("forwarders", forwarderService.findAllForwarders());
     }
 
-    // Utility method for validating shippers
+    // Utility method for validating shippers - if all shippers have the same port
     private boolean validateShippers(List<Long> shipperIds, Container container, Model model) {
         if (shipperIds == null || shipperIds.isEmpty()) {
             model.addAttribute("shipperSelectionError", "At least one shipper must be selected.");

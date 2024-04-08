@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter
@@ -30,7 +29,6 @@ public class Port {
         shipper.setClosestPort(this);
     }
 
-    // Utility method to remove a port from the country
     public void removeShipper(Shipper shipper) {
         shippers.remove(shipper);
         shipper.setClosestPort(null);
@@ -40,7 +38,4 @@ public class Port {
         this.name = name;
     }
 
-    public String toString() {
-        return "Port{id = " + id + ", name = " + name + "}";
-    }
 }

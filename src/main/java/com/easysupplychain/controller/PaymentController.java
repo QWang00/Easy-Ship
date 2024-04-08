@@ -8,15 +8,12 @@ import com.easysupplychain.service.ContainerService;
 import com.easysupplychain.service.ForwarderService;
 import com.easysupplychain.service.PaymentService;
 import com.easysupplychain.service.ShipperService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
 
 @Controller
 public class PaymentController {
@@ -123,12 +120,9 @@ public class PaymentController {
 
     @PostMapping("/save-payment")
     public String savePayment(@ModelAttribute Payment payment, BindingResult bindingResult,
-                              // Added a new parameter to directly receive the PaymentRecipient's ID from the form
                               @RequestParam("paymentRecipientId") Long recipientId, Model model) {
         if (bindingResult.hasErrors()) {
-            // Add the necessary attributes again so that they are available in the model
             addAttributesToModel(model, payment);
-            // Return to the form
             return "add-payment";
         }
 
@@ -172,6 +166,7 @@ public class PaymentController {
         return "redirect:/payments";
     }
 
+    // Utility method for adding common attributes to the model
     private void addAttributesToModel(Model model, Payment payment) {
         model.addAttribute("payment", payment);
         List<PaymentRecipient> recipients = new ArrayList<>();
@@ -182,6 +177,7 @@ public class PaymentController {
 
     }
 
+    // Utility method for validating if the selected recipient is the selected container's shipper/forwarder
     private boolean validateRecipientAndContainer(PaymentRecipient recipient, Container selectedContainer) {
         // Check if the recipient is a shipper and if the selected container contains this shipper
         if (recipient instanceof Shipper && selectedContainer.getShippers().contains(recipient)) {

@@ -9,26 +9,26 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
 </head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 <div class="container my-2">
     <div class="card">
         <div class="card-body">
             <form th:action="@{/save-update/{id}(id=${port.id})}" th:object="${port}" method="post">
                 <div class="row">
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-8" mb-4>
                         <label for="name" class="col-form-label">Port Name</label>
                         <input type="text" th:field="*{name}" class="form-control" id="name" required
                                placeholder="Port Name"/>
                     </div>
 
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-8 mb-4">
                         <label for="country" class="col-form-label">Country</label>
                         <select th:field ="*{country}" class="form-control" id="country" required >
                             <option th:each="country: ${countries}" th:value="${country.id}" th:text = "${country.name}"></option>
                         </select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 mt-3">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>

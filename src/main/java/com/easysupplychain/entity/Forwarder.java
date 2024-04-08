@@ -30,7 +30,6 @@ public class Forwarder extends PaymentRecipient {
     public void addContainer(Container container) {
         containers.add(container);
         container.setForwarder(this);
-
     }
 
     public void removeContainer(Container container) {

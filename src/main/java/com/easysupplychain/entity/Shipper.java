@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.HashSet;
 import java.util.Set;
 @Getter
@@ -28,10 +27,6 @@ public class Shipper extends PaymentRecipient {
 
     public Shipper(String name, String currency, String paymentTerm) {
         super(name, currency, paymentTerm);
-    }
-
-    public String toString() {
-        return "Shipper{closestPort = " + closestPort + ", containers = " + containers + "}";
     }
 
     public void addContainer(Container container) {

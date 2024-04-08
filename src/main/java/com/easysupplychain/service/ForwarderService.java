@@ -1,7 +1,6 @@
 package com.easysupplychain.service;
 
 import com.easysupplychain.entity.Forwarder;
-import com.easysupplychain.entity.Shipper;
 import com.easysupplychain.repository.ForwarderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

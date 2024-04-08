@@ -112,9 +112,6 @@ public class EasyShipApplication {
             paymentService.createPayment(payment2);
             containerService.createContainer(container1);
 
-            //test logic
-            System.out.println(payment1.getRecipientType());
-
         };}}
 
 

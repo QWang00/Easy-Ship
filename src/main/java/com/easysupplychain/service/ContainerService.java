@@ -1,6 +1,5 @@
 package com.easysupplychain.service;
 
-
 import com.easysupplychain.entity.Container;
 import com.easysupplychain.entity.Shipper;
 import com.easysupplychain.repository.ContainerRepository;
@@ -8,7 +7,6 @@ import com.easysupplychain.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,7 +57,7 @@ public class ContainerService {
         Container existingContainer = containerRepository.findById(container.getId())
                 .orElseThrow(() -> new RuntimeException("Container not found"));
 
-        // Update container properties, including departure and arrival ports
+        // Update container properties
         existingContainer.setContainerNumber(container.getContainerNumber());
         existingContainer.setContainerSize(container.getContainerSize());
         existingContainer.setETD(container.getETD());
@@ -68,11 +66,10 @@ public class ContainerService {
         existingContainer.setToPort(container.getToPort());
         existingContainer.setForwarder(container.getForwarder());
 
-        // First, remove the container from each shipper's set of containers
+        // Remove the container from each shipper's set of containers
         if (existingContainer.getShippers() != null) {
             existingContainer.getShippers().forEach(shipper -> shipper.getContainers().remove(existingContainer));
         }
-
 
         // Clear current shippers if you're replacing them
         existingContainer.getShippers().clear();
@@ -82,11 +79,8 @@ public class ContainerService {
             List<Shipper> shippers = shipperRepository.findAllById(shipperIds);
             shippers.forEach(existingContainer::addShipper); // This validates and adds shippers
         } else {
-            // Here you can handle the case where no shipper IDs were provided
-            // For example, you could throw an exception or handle it in another way
             throw new IllegalArgumentException("At least one shipper must be selected.");
         }
-
         // Save the updated container
         return containerRepository.save(existingContainer);
     }
@@ -102,8 +96,6 @@ public class ContainerService {
         // Use the removeShipper method to disassociate each shipper
         for (Shipper shipper : shippersCopy) {
             container.removeShipper(shipper);
-            // No need to save each shipper here if you are using cascading persist on the relationship,
-            // as the save at the end of this method should propagate changes.
         }
 
         // Save the container after shipper removal to ensure changes are cascaded
@@ -112,8 +104,6 @@ public class ContainerService {
         // Now we can safely delete the container
         containerRepository.deleteById(container.getId());
 
-        // Any post-deletion logic like logging or notifications
-        // ...
     }
 
 

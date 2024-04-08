@@ -24,6 +24,7 @@ public class ForwarderController {
         model.addAttribute("forwarders", forwarders);
         return "forwarders";
     }
+
     @GetMapping("/forwarder/{id}")
     public String findForwarder(@PathVariable Long id, Model model) {
         Forwarder forwarder = forwarderService.findForwarderById(id);
@@ -43,6 +44,7 @@ public class ForwarderController {
         model.addAttribute("forwarder", forwarderService.findForwarderById(id));
         return "update-forwarder";
     }
+
     @PostMapping("update-forwarder/{id}")
     public String saveUpdateForwarder(@PathVariable Long id, Forwarder forwarder, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors())

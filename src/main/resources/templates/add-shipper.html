@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
 </head>
 <body>
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 <div class="container my-2">
     <div class="card">
         <div class="card-body">
@@ -50,7 +50,7 @@
                         <div th:if="${#fields.hasErrors('closestPort')}" th:errors="*{closestPort}" class="alert alert-danger"></div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-6 mt-3">
                         <input type="submit" class="btn btn-primary" value="Submit">
                     </div>
                 </div>

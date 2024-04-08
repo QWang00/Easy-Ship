@@ -1,7 +1,6 @@
 package com.easysupplychain.controller;
 
 import com.easysupplychain.entity.Country;
-import com.easysupplychain.entity.Port;
 import com.easysupplychain.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +24,7 @@ public class CountryController {
         model.addAttribute("countries", countries);
         return "countries";
     }
+
     @GetMapping("/country/{id}")
     public String findCountry(@PathVariable Long id, Model model) {
         Country country = countryService.findCountryById(id);
@@ -47,12 +47,12 @@ public class CountryController {
         model.addAttribute("countries", countryService.findAllCountries());
         return "redirect:/countries";
     }
+
     @GetMapping("/update-country/{id}")
     public String updateCountry(@PathVariable Long id, Model model){
         model.addAttribute("country", countryService.findCountryById(id));
         return "update-country";
     }
-
 
     @GetMapping("/add-country")
     public String showCreateCountry(Country country) {

@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 <div class="container my-2">
     <div class="card">
         <div class="card-body">
@@ -32,7 +32,6 @@
                         <table class="table table-striped table-responsive-md">
                             <thead>
                             <tr>
-
                                 <th scope="col">Name</th>
                                 <th scope="col">Currency</th>
                                 <th scope="col">Payment Term</th>
@@ -42,7 +41,6 @@
                             </thead>
                             <tbody>
                             <tr th:each="forwarder : ${forwarders}">
-
                                 <td th:text="${forwarder.name}"></td>
                                 <td th:text="${forwarder.currency}"></td>
                                 <td th:text="${forwarder.paymentTerm}"></td>
