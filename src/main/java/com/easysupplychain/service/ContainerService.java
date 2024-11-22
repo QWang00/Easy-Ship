@@ -2,6 +2,7 @@ package com.easysupplychain.service;
 
 import com.easysupplychain.entity.Container;
 import com.easysupplychain.entity.Shipper;
+import com.easysupplychain.exception.ItemNotFoundException;
 import com.easysupplychain.repository.ContainerRepository;
 import com.easysupplychain.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class ContainerService {
     @Transactional
     public Container updateContainer(Container container, List<Long> shipperIds) {
         Container existingContainer = containerRepository.findById(container.getId())
-                .orElseThrow(() -> new RuntimeException("Container not found"));
+                .orElseThrow(() -> new ItemNotFoundException("Container not found"));
 
         // Update container properties
         existingContainer.setContainerNumber(container.getContainerNumber());
