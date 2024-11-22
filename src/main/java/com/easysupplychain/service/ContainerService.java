@@ -23,9 +23,9 @@ public class ContainerService {
     }
 
     public Container findContainerById(Long id) {
-        Container container = containerRepository.findById(id).orElseThrow(() ->new RuntimeException("Container Not found"));
-        return container;
+       return containerRepository.findById(id).orElseThrow(() ->new RuntimeException("Container Not found"));
     }
+
     @Transactional
     public void createContainer(Container container){
         containerRepository.save(container);
