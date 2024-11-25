@@ -31,15 +31,18 @@ public class ContainerService {
     public void createContainer(Container container){
         containerRepository.save(container);
     }
+
     @Transactional
     public void updateContainer(Container container){
         containerRepository.save(container);
     }
+
     @Transactional
     public void deleteContainer(Long id){
         Container container = containerRepository.findById(id).orElseThrow(()-> new RuntimeException("Container Not Found"));
         containerRepository.deleteById(container.getId());
     }
+
     @Transactional
     public void createContainer(Container container, List<Long> shipperIds) {
 
@@ -89,7 +92,7 @@ public class ContainerService {
     @Transactional
     public void deleteContainerWithShipper(Long id){
         Container container = containerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Container Not Found"));
+                .orElseThrow(() -> new ItemNotFoundException("Container Not Found"));
 
         // Copy the shippers to avoid ConcurrentModificationException during iteration
         Set<Shipper> shippersCopy = new HashSet<>(container.getShippers());
