@@ -53,10 +53,6 @@ public class ContainerController {
     public String updateContainer(@PathVariable Long id, Model model) {
         Container container = containerService.findContainerById(id);
         addAttributesToModel(model, container);
-//        model.addAttribute("container", container);
-//        model.addAttribute("ports", portService.findAllPorts());
-//        model.addAttribute("shippers", shipperService.findAllShippers());
-//        model.addAttribute("forwarders", forwarderService.findAllForwarders());
         return "update-container";
     }
 
