@@ -15,8 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 
-@RestController
-@RequestMapping("/api/v1")
+@Controller
 public class ContainerController {
 
     @Autowired
@@ -53,10 +52,11 @@ public class ContainerController {
     @GetMapping("update-container/{id}")
     public String updateContainer(@PathVariable Long id, Model model) {
         Container container = containerService.findContainerById(id);
-        model.addAttribute("container", container);
-        model.addAttribute("ports", portService.findAllPorts());
-        model.addAttribute("shippers", shipperService.findAllShippers());
-        model.addAttribute("forwarders", forwarderService.findAllForwarders());
+        addAttributesToModel(model, container);
+//        model.addAttribute("container", container);
+//        model.addAttribute("ports", portService.findAllPorts());
+//        model.addAttribute("shippers", shipperService.findAllShippers());
+//        model.addAttribute("forwarders", forwarderService.findAllForwarders());
         return "update-container";
     }
 
