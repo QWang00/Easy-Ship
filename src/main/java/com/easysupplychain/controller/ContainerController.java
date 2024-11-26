@@ -50,7 +50,7 @@ public class ContainerController {
     }
 
     @GetMapping("update-container/{id}")
-    public String updateContainer(@PathVariable Long id, Model model) {
+    public String showUpdateContainerForm(@PathVariable Long id, Model model) {
         Container container = containerService.findContainerById(id);
         addAttributesToModel(model, container);
         return "update-container";
