@@ -66,13 +66,7 @@ public class ContainerService {
                 .orElseThrow(() -> new ItemNotFoundException("Container not found"));
 
         // Update container properties
-        existingContainer.setContainerNumber(container.getContainerNumber());
-        existingContainer.setContainerSize(container.getContainerSize());
-        existingContainer.setETD(container.getETD());
-        existingContainer.setETA(container.getETA());
-        existingContainer.setFromPort(container.getFromPort());
-        existingContainer.setToPort(container.getToPort());
-        existingContainer.setForwarder(container.getForwarder());
+        updateContainerDetails(container, existingContainer);
 
         // Remove the container from each shipper's set of containers
         if (existingContainer.getShippers() != null) {
@@ -90,6 +84,16 @@ public class ContainerService {
         }
         // Save the updated container
         return containerRepository.save(existingContainer);
+    }
+
+    private static void updateContainerDetails(Container container, Container existingContainer) {
+        existingContainer.setContainerNumber(container.getContainerNumber());
+        existingContainer.setContainerSize(container.getContainerSize());
+        existingContainer.setETD(container.getETD());
+        existingContainer.setETA(container.getETA());
+        existingContainer.setFromPort(container.getFromPort());
+        existingContainer.setToPort(container.getToPort());
+        existingContainer.setForwarder(container.getForwarder());
     }
 
     @Transactional
