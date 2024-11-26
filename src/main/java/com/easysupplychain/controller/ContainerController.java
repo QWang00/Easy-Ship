@@ -71,7 +71,7 @@ public class ContainerController {
     }
 
     @GetMapping("/add-container")
-    public String showCreateContainer(Container container, Model model) {
+    public String showCreateContainerForm(Container container, Model model) {
         model.addAttribute("ports", portService.findAllPorts());
         model.addAttribute("shippers", shipperService.findAllShippers());
         model.addAttribute("forwarders", forwarderService.findAllForwarders());
