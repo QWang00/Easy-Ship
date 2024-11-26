@@ -116,6 +116,13 @@ public class ContainerService {
         containerRepository.deleteById(container.getId());
 
     }
+    public void validateEtdAndEta(Container container) {
+        if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
+            throw new IllegalArgumentException("ETD must be earlier than ETA.");
+        }
+    }
+
+
 
 
 }
