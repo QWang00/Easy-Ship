@@ -46,14 +46,18 @@ public class ContainerService {
     @Transactional
     public void createContainer(Container container, List<Long> shipperIds) {
 
+        addShippersToContainer(container, shipperIds);
+
+        // Save the container, which will also persist the associations due to cascading
+        containerRepository.save(container);
+    }
+
+    private void addShippersToContainer(Container container, List<Long> shipperIds) {
         // Find shippers from the database
         List<Shipper> shippers = shipperRepository.findAllById(shipperIds);
 
         // Use the addShipper method to establish the relationship correctly
         shippers.forEach(container::addShipper);
-
-        // Save the container, which will also persist the associations due to cascading
-        containerRepository.save(container);
     }
 
     @Transactional
@@ -80,8 +84,7 @@ public class ContainerService {
 
         // If shipperIds is not null or empty, find new shippers from the database and re-establish the relationship
         if (shipperIds != null && !shipperIds.isEmpty()) {
-            List<Shipper> shippers = shipperRepository.findAllById(shipperIds);
-            shippers.forEach(existingContainer::addShipper); // This validates and adds shippers
+            addShippersToContainer(existingContainer, shipperIds);
         } else {
             throw new IllegalArgumentException("At least one shipper must be selected.");
         }
