@@ -67,14 +67,7 @@ public class ContainerService {
 
         // Update container properties
         updateContainerDetails(container, existingContainer);
-
-        // Remove the container from each shipper's set of containers
-        if (existingContainer.getShippers() != null) {
-            existingContainer.getShippers().forEach(shipper -> shipper.getContainers().remove(existingContainer));
-        }
-
-        // Clear current shippers if you're replacing them
-        existingContainer.getShippers().clear();
+        reassignShippersToContainer(existingContainer, shipperIds);
 
         // If shipperIds is not null or empty, find new shippers from the database and re-establish the relationship
         if (shipperIds != null && !shipperIds.isEmpty()) {
