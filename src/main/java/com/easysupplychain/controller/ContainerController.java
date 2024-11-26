@@ -52,7 +52,7 @@ public class ContainerController {
     @GetMapping("update-container/{id}")
     public String showUpdateContainerForm(@PathVariable Long id, Model model) {
         Container container = containerService.findContainerById(id);
-        addAttributesToModel(model, container);
+        populateModelAttributes(model, container);
         return "update-container";
     }
 
@@ -92,7 +92,7 @@ public class ContainerController {
     }
 
     // Utility method for adding common attributes to the model
-    private void addAttributesToModel(Model model, Container container) {
+    private void populateModelAttributes(Model model, Container container) {
         model.addAttribute("container", container);
         model.addAttribute("ports", portService.findAllPorts());
         model.addAttribute("shippers", shipperService.findAllShippers());
@@ -103,7 +103,7 @@ public class ContainerController {
     private boolean validateShippers(List<Long> shipperIds, Container container, Model model) {
         if (shipperIds == null || shipperIds.isEmpty()) {
             model.addAttribute("shipperSelectionError", "At least one shipper must be selected.");
-            addAttributesToModel(model, container);
+            populateModelAttributes(model, container);
             return false;
         }
 
@@ -113,7 +113,7 @@ public class ContainerController {
 
         if (!validShippers) {
             model.addAttribute("shipperPortError", "All selected shippers must have the same closest port as the container's departure port.");
-            addAttributesToModel(model, container);
+            populateModelAttributes(model, container);
             return false;
         }
 
@@ -122,14 +122,14 @@ public class ContainerController {
 
     private String validateBeforeSave(BindingResult bindingResult, Model model, Container container, String attribute, List<Long> shipperIds) {
         if (bindingResult.hasErrors()) {
-            addAttributesToModel(model, container);
+            populateModelAttributes(model, container);
             return attribute;
         }
 
         // Validation for ETD and ETA
         if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
             model.addAttribute("dateTimeError", "ETD must be earlier than ETA.");
-            addAttributesToModel(model, container);
+            populateModelAttributes(model, container);
             return attribute;
         }
 
