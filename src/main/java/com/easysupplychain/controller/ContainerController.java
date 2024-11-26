@@ -79,7 +79,10 @@ public class ContainerController {
     }
 
     @PostMapping("/save-container")
-    public String saveContainer(@ModelAttribute @Valid Container container, BindingResult bindingResult, @RequestParam(required = false) List<Long> shipperIds, Model model) {
+    public String createContainer(@ModelAttribute @Valid Container container,
+                                BindingResult bindingResult,
+                                @RequestParam(required = false) List<Long> shipperIds,
+                                Model model) {
         String attribute = validateBeforeSave(bindingResult, model, container, "add-container", shipperIds);
         if (attribute != null) return attribute;
 
