@@ -136,5 +136,11 @@ public class ContainerService {
         }
     }
 
+    private void reassignShippersToContainer(Container container, List<Long> shipperIds) {
+        container.getShippers().forEach(shipper -> shipper.getContainers().remove(container));
+        container.getShippers().clear();
+        addShippersToContainer(container, shipperIds);
+    }
+
 
 }
