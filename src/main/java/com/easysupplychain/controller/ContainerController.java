@@ -58,23 +58,8 @@ public class ContainerController {
 
     @PostMapping("save-updateContainer/{id}")
     public String saveUpdateContainer(@PathVariable Long id, @ModelAttribute @Valid Container container, BindingResult bindingResult, @RequestParam(required = false) List<Long> shipperIds, Model model) {
-        if (bindingResult.hasErrors()) {
-            addAttributesToModel(model, container);
-            return "update-container";
-        }
-
-        // Validation for ETD and ETA
-        if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
-            model.addAttribute("dateTimeError", "ETD must be earlier than ETA.");
-            addAttributesToModel(model, container);
-            return "update-container";
-        }
-
-        // Validate shipper selection and departure port
-        if (!validateShippers(shipperIds, container, model)) {
-            // `validateShippers` will add necessary attributes to the model if there's an error
-            return "update-container";
-        }
+        String attribute = validateBeforeSave(bindingResult, model, container, "update-container", shipperIds);
+        if (attribute != null) return attribute;
 
         // Proceed with updating the container and associated shippers
         containerService.updateContainer(container, shipperIds);
@@ -91,22 +76,8 @@ public class ContainerController {
 
     @PostMapping("/save-container")
     public String saveContainer(@ModelAttribute @Valid Container container, BindingResult bindingResult, @RequestParam(required = false) List<Long> shipperIds, Model model) {
-        if (bindingResult.hasErrors()) {
-            addAttributesToModel(model, container);
-            return "add-container";
-        }
-
-        // Validation for ETD & ETA if ETD is earlier than ETA
-        if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
-            model.addAttribute("dateTimeError", "ETD must be earlier than ETA.");
-            addAttributesToModel(model, container);
-            return "add-container";
-        }
-
-        // Validate shipper selection and departure port
-        if (!validateShippers(shipperIds, container, model)) {
-            return "add-container";
-        }
+        String attribute = validateBeforeSave(bindingResult, model, container, "add-container", shipperIds);
+        if (attribute != null) return attribute;
 
         // Proceed with saving the container and associated shippers
         containerService.createContainer(container, shipperIds);
@@ -142,7 +113,26 @@ public class ContainerController {
         return true;
     }
 
+    private String validateBeforeSave(BindingResult bindingResult, Model model, Container container, String attribute, List<Long> shipperIds) {
+        if (bindingResult.hasErrors()) {
+            addAttributesToModel(model, container);
+            return attribute;
+        }
 
+        // Validation for ETD and ETA
+        if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
+            model.addAttribute("dateTimeError", "ETD must be earlier than ETA.");
+            addAttributesToModel(model, container);
+            return attribute;
+        }
+
+        // Validate shipper selection and departure port
+        if (!validateShippers(shipperIds, container, model)) {
+            // `validateShippers` will add necessary attributes to the model if there's an error
+            return attribute;
+        }
+        return null;
+    }
 }
 
 
