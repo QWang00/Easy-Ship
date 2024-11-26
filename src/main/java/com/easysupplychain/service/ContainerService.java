@@ -8,9 +8,8 @@ import com.easysupplychain.repository.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 @Service
 public class ContainerService {
@@ -109,15 +108,19 @@ public class ContainerService {
         containerRepository.deleteById(container.getId());
 
     }
-    public void validateEtdAndEta(Container container) {
+    public String validateEtdAndEta(Container container) {
         if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
-            throw new IllegalArgumentException("ETD must be earlier than ETA.");
+            return "ETD must be earlier than ETA.";
         }
+        return null;
     }
 
-    public void validateShippers(List<Long> shipperIds, Container container) {
+    public Map<String, String> validateShippers(List<Long> shipperIds, Container container) {
+        Map<String, String> errors = new HashMap<>();
+
         if (shipperIds == null || shipperIds.isEmpty()) {
-            throw new IllegalArgumentException("At least one shipper must be selected.");
+            errors.put("shipperSelectionError", "At least one shipper must be selected.");
+            return errors;
         }
 
         List<Shipper> selectedShippers = shipperRepository.findAllById(shipperIds);
@@ -125,8 +128,10 @@ public class ContainerService {
                 .allMatch(shipper -> shipper.getClosestPort().equals(container.getFromPort()));
 
         if (!validShippers) {
-            throw new IllegalArgumentException("All selected shippers must have the same closest port as the container's departure port.");
+            errors.put("shipperPortError", "All selected shippers must have the same closest port as the container's departure port.");
         }
+
+        return errors;
     }
 
     private void reassignShippersToContainer(Container container, List<Long> shipperIds) {
