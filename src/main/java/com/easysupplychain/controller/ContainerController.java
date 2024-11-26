@@ -57,7 +57,11 @@ public class ContainerController {
     }
 
     @PostMapping("save-updateContainer/{id}")
-    public String saveUpdateContainer(@PathVariable Long id, @ModelAttribute @Valid Container container, BindingResult bindingResult, @RequestParam(required = false) List<Long> shipperIds, Model model) {
+    public String updateContainer(@PathVariable Long id,
+                                  @ModelAttribute @Valid Container container,
+                                  BindingResult bindingResult,
+                                  @RequestParam(required = false) List<Long> shipperIds,
+                                  Model model) {
         String attribute = validateBeforeSave(bindingResult, model, container, "update-container", shipperIds);
         if (attribute != null) return attribute;
 
