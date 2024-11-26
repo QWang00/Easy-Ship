@@ -122,7 +122,19 @@ public class ContainerService {
         }
     }
 
+    public void validateShippers(List<Long> shipperIds, Container container) {
+        if (shipperIds == null || shipperIds.isEmpty()) {
+            throw new IllegalArgumentException("At least one shipper must be selected.");
+        }
 
+        List<Shipper> selectedShippers = shipperRepository.findAllById(shipperIds);
+        boolean validShippers = selectedShippers.stream()
+                .allMatch(shipper -> shipper.getClosestPort().equals(container.getFromPort()));
+
+        if (!validShippers) {
+            throw new IllegalArgumentException("All selected shippers must have the same closest port as the container's departure port.");
+        }
+    }
 
 
 }
