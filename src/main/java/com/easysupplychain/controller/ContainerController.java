@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -62,10 +63,22 @@ public class ContainerController {
                                   BindingResult bindingResult,
                                   @RequestParam(required = false) List<Long> shipperIds,
                                   Model model) {
-        String attribute = validateBeforeSave(bindingResult, model, container, "update-container", shipperIds);
-        if (attribute != null) return attribute;
+        String dateTimeError = containerService.validateEtdAndEta(container);
 
-        // Proceed with updating the container and associated shippers
+        if (dateTimeError != null) {
+            model.addAttribute("dateTimeError", dateTimeError);
+            populateModelAttributes(model, container);
+            return "update-container";
+        }
+
+        // Validate Shippers
+        Map<String, String> shipperErrors = containerService.validateShippers(shipperIds, container);
+        if (!shipperErrors.isEmpty()) {
+            shipperErrors.forEach(model::addAttribute);
+            populateModelAttributes(model, container);
+            return "update-container";
+        }
+
         containerService.updateContainer(container, shipperIds);
         return "redirect:/containers";
     }
@@ -83,10 +96,27 @@ public class ContainerController {
                                 BindingResult bindingResult,
                                 @RequestParam(required = false) List<Long> shipperIds,
                                 Model model) {
-        String attribute = validateBeforeSave(bindingResult, model, container, "add-container", shipperIds);
-        if (attribute != null) return attribute;
+        if (bindingResult.hasErrors()) {
+            populateModelAttributes(model, container);
+            return "add-container";
+        }
 
-        // Proceed with saving the container and associated shippers
+        // Validate ETD and ETA
+        String dateTimeError = containerService.validateEtdAndEta(container);
+        if (dateTimeError != null) {
+            model.addAttribute("dateTimeError", dateTimeError);
+            populateModelAttributes(model, container);
+            return "add-container";
+        }
+
+        // Validate Shippers
+        Map<String, String> shipperErrors = containerService.validateShippers(shipperIds, container);
+        if (!shipperErrors.isEmpty()) {
+            shipperErrors.forEach(model::addAttribute);
+            populateModelAttributes(model, container);
+            return "add-container";
+        }
+
         containerService.createContainer(container, shipperIds);
         return "redirect:/containers";
     }
