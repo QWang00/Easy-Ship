@@ -99,47 +99,8 @@ public class ContainerController {
         model.addAttribute("forwarders", forwarderService.findAllForwarders());
     }
 
-    // Utility method for validating shippers - if all shippers have the same port
-    private boolean validateShippers(List<Long> shipperIds, Container container, Model model) {
-        if (shipperIds == null || shipperIds.isEmpty()) {
-            model.addAttribute("shipperSelectionError", "At least one shipper must be selected.");
-            populateModelAttributes(model, container);
-            return false;
-        }
 
-        List<Shipper> selectedShippers = shipperService.findAllShippersByIds(shipperIds);
-        boolean validShippers = selectedShippers.stream()
-                .allMatch(shipper -> shipper.getClosestPort().equals(container.getFromPort()));
 
-        if (!validShippers) {
-            model.addAttribute("shipperPortError", "All selected shippers must have the same closest port as the container's departure port.");
-            populateModelAttributes(model, container);
-            return false;
-        }
-
-        return true;
-    }
-
-    private String validateBeforeSave(BindingResult bindingResult, Model model, Container container, String attribute, List<Long> shipperIds) {
-        if (bindingResult.hasErrors()) {
-            populateModelAttributes(model, container);
-            return attribute;
-        }
-
-        // Validation for ETD and ETA
-        if (container.getETD() != null && container.getETA() != null && !container.getETD().before(container.getETA())) {
-            model.addAttribute("dateTimeError", "ETD must be earlier than ETA.");
-            populateModelAttributes(model, container);
-            return attribute;
-        }
-
-        // Validate shipper selection and departure port
-        if (!validateShippers(shipperIds, container, model)) {
-            // `validateShippers` will add necessary attributes to the model if there's an error
-            return attribute;
-        }
-        return null;
-    }
 }
 
 
